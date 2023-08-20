@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Set Environment Variables
+      run: echo "CI=false" >> $GITHUB_ENV
     - name: Checkout code
       uses: actions/checkout@v2
 
