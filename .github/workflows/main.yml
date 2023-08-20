@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # Adjust this branch name
+      - main
 
 jobs:
   deploy:
@@ -13,18 +13,19 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Build and deploy
-      run: |
-        # Build your application here
-        npm install
-        npm run build
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14  # Change this to your desired Node.js version
 
-        # Copy build files to a deploy directory
-        mkdir deploy
-        cp -r build/* deploy/
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build application
+      run: npm run build  # Adjust this command based on your build process
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./deploy  # Directory containing your built files
+        publish_dir: ./build  # Directory containing your built files
