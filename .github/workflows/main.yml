@@ -3,29 +3,28 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main  # Adjust this branch name
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: 18
+    - name: Build and deploy
+      run: |
+        # Build your application here
+        npm install
+        npm run build
 
-      - name: Install dependencies
-        run: npm install
+        # Copy build files to a deploy directory
+        mkdir deploy
+        cp -r build/* deploy/
 
-      - name: Build
-        run: npm run build
-
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@releases/v4
-        with:
-          branch: main # Change to "main" if deploying from the "main" branch
-          folder: build
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./deploy  # Directory containing your built files
